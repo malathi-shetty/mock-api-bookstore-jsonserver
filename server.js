@@ -7,6 +7,39 @@ const { v4: uuidv4 } = require('uuid');
 server.use(middlewares);
 server.use(jsonServer.bodyParser);
 
+// ✅ Public routes allowed BEFORE auth middleware
+const isPublicRoute = (req) => {
+  const publicRoutes = [
+    { method: 'POST', path: '/users' },
+    { method: 'POST', path: '/sessions' },
+    { method: 'GET', path: '/books' },
+    { method: 'GET', path: '/publishers' }
+  ];
+
+  return publicRoutes.some(
+    route => route.method === req.method && req.path.startsWith(route.path)
+  );
+};
+
+// 🔐 Auth middleware (ONLY applied after public routes)
+server.use((req, res, next) => {
+  if (isPublicRoute(req)) return next();
+
+  const authHeader = req.headers.authorization;
+  if (!authHeader || !authHeader.startsWith('Bearer ')) {
+    return res.status(401).json({ error: 'Unauthorized: Token missing' });
+  }
+
+  const token = authHeader.split(' ')[1];
+  const session = router.db.get('sessions').find({ token }).value();
+  if (!session) {
+    return res.status(401).json({ error: 'Unauthorized: Invalid token' });
+  }
+
+  next();
+});
+
+// ✅ POST /sessions → Simulate login
 server.post('/sessions', (req, res) => {
   const { userId } = req.body;
   const token = uuidv4();
@@ -15,19 +48,7 @@ server.post('/sessions', (req, res) => {
   res.status(201).json(session);
 });
 
-server.use((req, res, next) => {
-  const publicPaths = ['/books', '/publishers', '/users', '/sessions'];
-  const isPublic = publicPaths.some(path => req.path.startsWith(path));
-  if (isPublic && req.method === 'GET') return next();
-
-  const token = req.headers.authorization?.split(' ')[1];
-  const validSession = router.db.get('sessions').find({ token }).value();
-  if (validSession) return next();
-
-  return res.status(401).json({ error: 'Unauthorized' });
-});
-
 server.use(router);
 server.listen(3000, () => {
-  console.log('🚀 JSON Server running at http://localhost:3000');
+  console.log('✅ JSON Server running at http://localhost:3000');
 });
