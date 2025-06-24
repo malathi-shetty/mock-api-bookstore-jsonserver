@@ -1,12 +1,62 @@
 {
-  "books": [],
-  "publishers": [],
-  "users": [],
-  "sessions": [
+  "books": [
     {
-      "id": "b9f929f5-e4a0-4204-96a9-a6effe2ccbf2",
-      "token": "5f629fd2-15b7-4a46-a78f-d38bc042552c"
+      "id": 1,
+      "title": "Clean Code",
+      "author": "Robert C. Martin",
+      "publisherId": 1,
+      "price": 500
+    },
+    {
+      "id": 2,
+      "title": "Effective Java",
+      "author": "Joshua Bloch",
+      "publisherId": 2,
+      "price": 650
     }
   ],
-  "orders": []
+  "publishers": [
+    {
+      "id": 1,
+      "name": "Prentice Hall",
+      "country": "USA"
+    },
+    {
+      "id": 2,
+      "name": "Addison-Wesley",
+      "country": "UK"
+    }
+  ],
+  "users": [
+    {
+      "id": 1,
+      "email": "test1@api.com",
+      "password": "test123"
+    },
+    {
+      "id": 2,
+      "email": "admin@api.com",
+      "password": "adminpass"
+    }
+  ],
+  "sessions": [
+    {
+      "id": "session-abc",
+      "userId": 1,
+      "token": "token-test-user-1"
+    },
+    {
+      "id": "session-admin",
+      "userId": 2,
+      "token": "token-admin-user"
+    }
+  ],
+  "orders": [
+    {
+      "id": 1,
+      "bookId": 2,
+      "userId": 1,
+      "quantity": 1
+    }
+  ]
 }
