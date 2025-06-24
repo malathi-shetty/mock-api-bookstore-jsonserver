@@ -2,6 +2,11 @@
   "books": [],
   "publishers": [],
   "users": [],
-  "sessions": [],
+  "sessions": [
+    {
+      "id": "b9f929f5-e4a0-4204-96a9-a6effe2ccbf2",
+      "token": "5f629fd2-15b7-4a46-a78f-d38bc042552c"
+    }
+  ],
   "orders": []
 }
